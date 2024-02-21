@@ -1,0 +1,33 @@
+.book-content {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.book-image {
+  width: 100px; /* 책 이미지 크기, 필요에 따라 조정 */
+  height: 150px; /* 책 이미지 크기, 필요에 따라 조정 */
+  object-fit: cover; /* 이미지 비율 유지 */
+  margin-right: 20px;
+}
+
+.book-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.return-deadline {
+  margin: 0;
+  font-weight: bold;
+}
+
+.overdue-status {
+  margin: 0;
+  color: #4CAF50; /* 연체 없음 시 색상 */
+}
+
+.overdue-status.overdue {
+  color: #F44336; /* 연체 중 시 색상 */
+}

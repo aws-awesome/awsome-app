@@ -1,0 +1,41 @@
+.facility-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee; /* 구분선 추가 */
+    padding-bottom: 20px;
+  }
+  
+  .facility-image {
+    width: 100px; /* 시설 이미지 크기, 필요에 따라 조정 */
+    height: 100px; /* 시설 이미지 크기, 필요에 따라 조정 */
+    object-fit: cover; /* 이미지 비율 유지 */
+    margin-right: 20px;
+  }
+  
+  .facility-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .facility-name {
+    margin: 0 0 10px 0;
+  }
+  
+  .reservation-date, .reservation-time {
+    margin: 5px 0;
+  }
+  
+  .completion-status {
+    font-weight: bold;
+  }
+  
+  .completed {
+    color: #4CAF50; /* 사용 완료 시 색상 */
+  }
+  
+  .pending {
+    color: #FF9800; /* 사용 대기 시 색상 */
+  }
+  

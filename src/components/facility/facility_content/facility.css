@@ -1,0 +1,23 @@
+.facility-container {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin: 20px;
+    text-align: center;
+  }
+  
+  .facility-title {
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  .facility-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+  }
+  
+  .facility-availability {
+    color: #4CAF50;
+    font-weight: bold;
+  }
+  

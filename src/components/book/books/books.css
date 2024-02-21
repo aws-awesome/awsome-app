@@ -1,0 +1,18 @@
+.books-category {
+    margin: 20px;
+    width: calc(25% - 40px); /* 4개 가로 배치를 위한 너비 설정, 여백 고려 */
+  }
+  
+  .book-item {
+    margin-bottom: 20px;
+  }
+  
+  .book-image {
+    width: 100%; /* 이미지 너비를 컨테이너에 맞춤 */
+    height: auto;
+  }
+  
+  .book-title {
+    text-align: center; /* 제목을 중앙 정렬 */
+  }
+  

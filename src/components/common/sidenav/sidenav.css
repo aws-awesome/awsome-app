@@ -1,0 +1,33 @@
+.side-nav {
+    width: 250px;
+    position: fixed;
+    left: -250px;
+    top: 0;
+    bottom: 0;
+    background-color: #f8f8f8;
+    transition: left 0.3s ease;
+    padding-top: 60px; /* Adjust based on your header height */
+  }
+  
+  .side-nav.visible {
+    left: 0;
+  }
+  
+  .side-nav nav ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .side-nav nav ul li {
+    padding: 10px 20px;
+  }
+  
+  .side-nav nav ul li a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .side-nav nav ul li a.active {
+    color: #007bff; /* Active link color */
+  }
+  
