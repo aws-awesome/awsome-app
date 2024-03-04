@@ -1,8 +1,10 @@
-import React from "react";
-import styled, { css } from "styled-components";
+"use client";
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { usePathname, useRouter } from "next/navigation";
 
 const FacilityContainer = styled.div`
-  width: 30%;
+  width: 25%;
   height: 50%;
   border: 1px solid #e2e8f0; /* Tailwind's gray-200 */
   padding: 1rem; /* 16px */
@@ -50,8 +52,24 @@ const FacilityStatus = styled.p`
 `;
 
 const Facility = ({ title, imageUrl, isAvailable }) => {
+  const [isClient, setIsClient] = useState(false);
+  //const router = useRouter();
+
+  useEffect(() => {
+    // 컴포넌트가 마운트된 후에만 클라이언트 사이드임을 확인
+    setIsClient(true);
+  }, []);
+
+  // 클릭 이벤트 핸들러
+  const handleClick = () => {
+    // 클라이언트 사이드에서 실행될 때만 라우팅 수행
+    if (isClient) {
+      router.push(`/faReserve?title=${encodeURIComponent(title)}`);
+    }
+  };
+
   return (
-    <FacilityContainer>
+    <FacilityContainer onClick={handleClick}>
       <FacilityTitle>{title}</FacilityTitle>
       <FacilityImage src={imageUrl} alt={title} />
       <FacilityStatus isAvailable={isAvailable}>

@@ -1,8 +1,8 @@
-// LoginPage.js
 "use client";
 import React, { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import CoHeader from "../../components/common/coheader/coheader";
 import CoFooter from "../../components/common/cofooter/cofooter";
 
@@ -48,13 +48,28 @@ const Title = styled.h2`
 `;
 
 export default function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const router = useRouter();
+  const [studentId, setStudentId] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // 로그인 로직 구현 부분
-    alert(`Login attempt with Username: ${username} Password: ${password}`);
+    try {
+      const response = await fetch(
+        `https://p530mrhup5.execute-api.ap-northeast-2.amazonaws.com/getStudentByStudentId?student_id=${studentId}`
+      );
+      const data = await response.json();
+      if (data.length > 0) {
+        // 학생 이름을 로컬 스토리지에 저장 (예시로 첫 번째 항목의 이름 사용)
+        localStorage.setItem("userName", data[0].student_name);
+        localStorage.setItem("isLoggedIn", "true");
+        router.push("/"); // 홈 페이지로 리다이렉트
+      } else {
+        alert("Login Failed: No matching student ID found");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Login Failed: Error occurred");
+    }
   };
 
   return (
@@ -65,15 +80,14 @@ export default function LoginPage() {
           <Title>Login</Title>
           <Input
             type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Student ID"
+            value={studentId}
+            onChange={(e) => setStudentId(e.target.value)}
           />
           <Input
             type="password"
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)} // 비밀번호는 현재 사용되지 않음
           />
           <Button type="submit">Log In</Button>
           <p>

@@ -10,6 +10,7 @@ import styled from "styled-components"; // styled-components import
 
 const BookPageContainer = styled.div`
   display: flex;
+  background = #f0f0f0;
   flex-direction: column;
   min-height: 100vh;
 `;

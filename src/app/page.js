@@ -1,49 +1,29 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import CoHeader from "../components/common/coheader/coheader";
 import CoFooter from "../components/common/cofooter/cofooter";
 import TitleComponent from "@/components/common/title/title";
 import BestBook from "@/components/home/bestBook/bestBook";
 
 function Home() {
-  const bookdata = [
-    {
-      id: 1,
-      imageUrl: "https://example.com/book1.jpg",
-      title: "책 제목 1",
-      author: "작가1",
-    },
-    {
-      id: 1,
-      imageUrl: "https://example.com/book1.jpg",
-      title: "책 제목 1",
-      author: "작가1",
-    },
-    {
-      id: 1,
-      imageUrl: "https://example.com/book1.jpg",
-      title: "책 제목 1",
-      author: "작가1",
-    },
-    {
-      id: 1,
-      imageUrl: "https://example.com/book1.jpg",
-      title: "책 제목 1",
-      author: "작가1",
-    },
-    {
-      id: 1,
-      imageUrl: "https://example.com/book1.jpg",
-      title: "책 제목 1",
-      author: "작가1",
-    },
-    {
-      id: 1,
-      imageUrl: "https://example.com/book1.jpg",
-      title: "책 제목 1",
-      author: "작가1",
-    },
-    // 나머지 책 데이터...
-  ];
+  const [bookdata, setBookdata] = useState([]);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await fetch(
+          "https://p530mrhup5.execute-api.ap-northeast-2.amazonaws.com/getSixBooks"
+        );
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+        setBookdata(data);
+      } catch (error) {
+        console.error("There was a problem with the fetch operation:", error);
+      }
+    };
+
+    fetchBooks();
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -54,14 +34,12 @@ function Home() {
             AWSome University Library
           </h1>
           <TitleComponent title="Best Books" />
-          {/* 가로 배치를 위한 flex 컨테이너 */}
           <div className="flex flex-wrap justify-center gap-4 p-4">
-            {bookdata.map((book) => (
+            {bookdata.map((book, index) => (
               <BestBook
-                key={book.id}
-                imageUrl={book.imageUrl}
+                key={index}
+                imageUrl={book.imageUrl || "https://example.com/book1.jpg"}
                 title={book.title}
-                author={book.author}
               />
             ))}
           </div>
@@ -71,4 +49,5 @@ function Home() {
     </div>
   );
 }
+
 export default Home;
