@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import styled from "styled-components";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import logoImage from "../../../image/logo.png";
@@ -16,6 +16,7 @@ const HeaderContainer = styled.div`
   padding: 30px 2rem 0;
   box-shadow: 0 4px 15px -1px rgba(0, 0, 0, 0.3);
   position: relative;
+  padding: 3%;
 `;
 
 const Nav = styled.nav`
