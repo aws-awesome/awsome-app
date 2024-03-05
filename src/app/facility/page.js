@@ -34,8 +34,8 @@ const FacilityPage = () => {
             <Facility
               key={index}
               title={`CLASS ${facility.location}`} // 예시로 location을 CLASS 이름으로 사용
-              imageUrl="https://example.com/library.jpg" // API에서 이미지 URL을 제공하지 않으므로 임시 URL 사용
-              isAvailable={facility.true === "true"} // "true" 필드를 기반으로 예약 가능 여부 판단
+              imageUrl={facility.img_url} // API에서 이미지 URL을 제공하는 경우
+              isAvailable={facility.status === "true"} // "true" 필드를 기반으로 예약 가능 여부 판단
               capacity={facility.capacity} // 수용 인원 정보 추가
             />
           ))}

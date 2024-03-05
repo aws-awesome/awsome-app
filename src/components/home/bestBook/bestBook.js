@@ -5,8 +5,9 @@ import styled from "styled-components";
 // BookContainer 컴포넌트를 스타일링합니다.
 const BookContainer = styled.div`
   width: 25%;
+  height: auto;
   border: 1px solid #e2e8f0;
-  padding: 1rem; /* 16px */
+  padding: 2rem; /* 16px */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -25,8 +26,7 @@ const BookContainer = styled.div`
 
 // BookImage 컴포넌트를 스타일링합니다.
 const BookImage = styled.img`
-  width: 6rem; /* 24 */
-  height: 6rem; /* 24 */
+  width: 10rem; /* 24 */
   margin-bottom: 1rem; /* 4 */
   object-fit: cover;
 `;

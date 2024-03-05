@@ -50,6 +50,7 @@ const Title = styled.h2`
 export default function LoginPage() {
   const router = useRouter();
   const [studentId, setStudentId] = useState("");
+  const [password, setPassword] = useState(""); // 비밀번호 상태 추가
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,9 +60,10 @@ export default function LoginPage() {
       );
       const data = await response.json();
       if (data.length > 0) {
-        // 학생 이름을 로컬 스토리지에 저장 (예시로 첫 번째 항목의 이름 사용)
+        // 학생 이름과 student_id를 로컬 스토리지에 저장
         localStorage.setItem("userName", data[0].student_name);
-        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("studentId", studentId); // student_id 저장
+        localStorage.setItem("isLoggedIn", "true"); // 로그인 상태 저장
         router.push("/"); // 홈 페이지로 리다이렉트
       } else {
         alert("Login Failed: No matching student ID found");
@@ -87,7 +89,8 @@ export default function LoginPage() {
           <Input
             type="password"
             placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)} // 비밀번호는 현재 사용되지 않음
+            value={password} // 비밀번호 입력 상태를 반영
+            onChange={(e) => setPassword(e.target.value)} // 비밀번호 상태 업데이트
           />
           <Button type="submit">Log In</Button>
           <p>

@@ -1,82 +1,106 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { usePathname, useRouter } from "next/navigation";
 
+const FacilitiesContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+`;
+
 const FacilityContainer = styled.div`
   width: 25%;
-  height: 50%;
-  border: 1px solid #e2e8f0; /* Tailwind's gray-200 */
-  padding: 1rem; /* 16px */
-  margin: 1rem; /* 16px */
+  min-width: 250px;
+  border: 1px solid #e2e8f0;
+  padding: 20px;
+  margin: 10px;
   text-align: center;
-  background-color: #ffffff; /* white */
-  border-radius: 0.5rem; /* 8px */
-  box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Tailwind's shadow-lg */
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
 
   &:hover {
-    transform: translateY(-5px); /* Slightly raise the card */
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-      0 10px 10px -5px rgba(0, 0, 0, 0.04); /* Increase shadow */
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
   }
 `;
 
-const FacilityTitle = styled.h2`
-  font-size: 1.25rem; /* text-lg */
-  font-weight: bold; /* font-bold */
-  color: #2d3748; /* Tailwind's gray-800 */
-  margin-bottom: 0.75rem; /* mb-3 */
-`;
-
 const FacilityImage = styled.img`
-  max-width: 100%;
+  width: 100%;
   height: auto;
+  max-height: 200px;
   object-fit: cover;
-  margin-bottom: 0.75rem; /* mb-3 */
-  border-radius: 0.375rem; /* rounded-md */
+  margin-bottom: 15px;
 `;
 
-const FacilityStatus = styled.p`
-  font-weight: bold; /* font-bold */
-  font-size: 1rem; /* text-lg */
-  padding: 0.25rem 0.5rem; /* py-1 px-2 */
-  display: inline-block;
-  border-radius: 9999px; /* rounded-full */
-  color: #ffffff; /* white */
+const FacilityTitle = styled.h2`
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #2d3748;
+  margin-bottom: 10px;
+`;
+
+const FacilityInfo = styled.p`
+  margin: 5px 0;
+  font-size: 1rem;
+`;
+
+const FacilityStatus = styled(FacilityInfo)`
+  color: #ffffff;
   background-color: ${({ isAvailable }) =>
-    isAvailable
-      ? "#38a169"
-      : "#e53e3e"}; /* Tailwind's green-500 for available, red-500 for not */
+    isAvailable ? "#38a169" : "#e53e3e"};
+  padding: 5px;
+  border-radius: 20px;
+  display: inline-block;
 `;
 
-const Facility = ({ title, imageUrl, isAvailable }) => {
-  const [isClient, setIsClient] = useState(false);
-  //const router = useRouter();
+const FacilitiesPage = () => {
+  const [facilities, setFacilities] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
-    // 컴포넌트가 마운트된 후에만 클라이언트 사이드임을 확인
-    setIsClient(true);
+    const fetchFacilities = async () => {
+      const response = await fetch(
+        "https://p530mrhup5.execute-api.ap-northeast-2.amazonaws.com/getCurrentReservationInfo"
+      );
+      const data = await response.json();
+      // Assuming the API response directly maps to the state
+      setFacilities(data);
+    };
+
+    fetchFacilities();
   }, []);
 
-  // 클릭 이벤트 핸들러
-  const handleClick = () => {
-    // 클라이언트 사이드에서 실행될 때만 라우팅 수행
-    if (isClient) {
-      router.push(`/faReserve?title=${encodeURIComponent(title)}`);
-    }
+  // Function to handle click on a facility
+  const handleClick = (facilityId) => {
+    router.push(`facility/${encodeURIComponent(facilityId)}`);
   };
 
   return (
-    <FacilityContainer onClick={handleClick}>
-      <FacilityTitle>{title}</FacilityTitle>
-      <FacilityImage src={imageUrl} alt={title} />
-      <FacilityStatus isAvailable={isAvailable}>
-        {isAvailable ? "예약 가능" : "예약 불가능"}
-      </FacilityStatus>
-    </FacilityContainer>
+    <FacilitiesContainer>
+      {facilities.map((facility, index) => (
+        <FacilityContainer
+          key={index}
+          onClick={() => handleClick(facility.facility_id)}
+        >
+          <FacilityImage
+            src={facility.img_url || "placeholder-image-url.jpg"}
+            alt={facility.facility_id}
+          />
+          <FacilityTitle>{facility.facility_id}</FacilityTitle>
+          <FacilityInfo>Capacity: {facility.capacity}</FacilityInfo>
+          <FacilityStatus isAvailable={facility.true === "true"}>
+            {facility.true === "true" ? "Available" : "Unavailable"}
+          </FacilityStatus>
+        </FacilityContainer>
+      ))}
+    </FacilitiesContainer>
   );
 };
 
-export default Facility;
+export default FacilitiesPage;

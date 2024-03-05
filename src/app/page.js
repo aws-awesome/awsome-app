@@ -28,7 +28,9 @@ function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <CoHeader />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-8 py-16">
+        {" "}
+        {/* Increased padding */}
         <main className="flex-grow">
           <h1 className="text-3xl font-bold text-center my-6">
             AWSome University Library
@@ -38,13 +40,14 @@ function Home() {
             {bookdata.map((book, index) => (
               <BestBook
                 key={index}
-                imageUrl={book.imageUrl || "https://example.com/book1.jpg"}
+                imageUrl={book.img_url}
                 title={book.title}
               />
             ))}
           </div>
         </main>
       </div>
+
       <CoFooter />
     </div>
   );

@@ -1,76 +1,168 @@
-// BookPage.js
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import CoHeader from "../../components/common/coheader/coheader";
 import CoFooter from "../../components/common/cofooter/cofooter";
 import TitleComponent from "@/components/common/title/title";
-import Search from "../../components/book/search/search";
-import Books from "../../components/book/books/books";
-import styled from "styled-components"; // styled-components import
+import styled from "styled-components";
 
-const BookPageContainer = styled.div`
+const PageContainer = styled.div`
   display: flex;
-  background = #f0f0f0;
   flex-direction: column;
   min-height: 100vh;
+  background-color: #f0f0f0;
 `;
 
 const ContentContainer = styled.div`
   flex-grow: 1;
+  padding: 20px;
+  margin: 5%;
+  border: 1px solid gray;
+  background-color: white;
+  border-radius: 25px;
+`;
+
+const SearchContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+`;
+
+const SearchInput = styled.input`
+  width: 40%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+`;
+
+const SearchButton = styled.button`
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 20px;
+  margin-left: 10px;
+  background-color: rgb(135, 185, 255);
+  color: white;
+  cursor: pointer;
+`;
+
+const BooksContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+`;
+
+const BookCard = styled.div`
+  width: 300px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  padding: 3%;
+  margin: 5px 5px 50px 5px;
+
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 16px rgba(0, 0, 0, 0.1);
+  }
+`;
+
+const BookImage = styled.img`
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  border-radius: 8px;
+`;
+
+const BookTitle = styled.h3`
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+  text-align: center;
+`;
+
+const BookAvailability = styled.p`
+  font-size: 18px;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  padding: 2%;
+  background-color: ${({ available }) => (available ? "#007b10" : "#ff3333")};
+  border-radius: 5px;
+`;
+
+const NoResultsMessage = styled.p`
+  font-size: 18px;
+  text-align: center;
 `;
 
 const BookPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const router = useRouter();
 
-  const books = [
-    {
-      imageUrl: "https://example.com/book1.jpg",
-      title: "Book 1",
-      author: "Author A",
-    },
-    {
-      imageUrl: "https://example.com/book2.jpg",
-      title: "Book 2",
-      author: "Author B",
-    },
-    {
-      imageUrl: "https://example.com/book3.jpg",
-      title: "Book 3",
-      author: "Author C",
-    },
-    {
-      imageUrl: "https://example.com/book4.jpg",
-      title: "Book 4",
-      author: "Author D",
-    },
-  ];
-
-  const handleSearch = (term) => {
-    console.log("검색어:", term);
-    // 검색 로직 구현 (예: API 호출, books 필터링 등)
+  const handleSearch = async () => {
+    if (searchTerm.trim()) {
+      try {
+        const response = await fetch(
+          `https://p530mrhup5.execute-api.ap-northeast-2.amazonaws.com/getBookByTitle?title=${encodeURIComponent(
+            searchTerm.trim()
+          )}`
+        );
+        const data = await response.json();
+        setSearchResults(data);
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+      }
+    }
   };
 
-  return (
-    <BookPageContainer>
-      <CoHeader />
-      <ContentContainer className="container mx-auto px-4 py-8">
-        <TitleComponent title="Library" />
+  useEffect(() => {
+    handleSearch();
+  }, [searchTerm]);
 
-        <div className="mt-8">
-          <Search onSearch={handleSearch} />
-          <div className="grid grid-cols-4 gap-4 mt-4">
-            {books.map((book, index) => (
-              <Books
-                key={index}
-                category={`Category ${index + 1}`}
-                books={[book]}
-              />
+  return (
+    <PageContainer>
+      <CoHeader />
+      <ContentContainer>
+        <TitleComponent title="SEARCH " />
+        <SearchContainer>
+          <SearchInput
+            type="text"
+            placeholder="Search by book title..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <SearchButton onClick={handleSearch}>Search</SearchButton>
+        </SearchContainer>
+        {searchResults.length > 0 ? (
+          <BooksContainer>
+            {searchResults.map((book) => (
+              <BookCard key={book.book_id}>
+                <BookTitle>{book.title}</BookTitle>
+                <BookImage src={book.img_url} alt={book.title} />
+                <BookAvailability available={!book.is_loaned}>
+                  {book.is_loaned
+                    ? "Not Available for Loan"
+                    : "Available for Loan"}
+                </BookAvailability>
+              </BookCard>
             ))}
-          </div>
-        </div>
+          </BooksContainer>
+        ) : (
+          <NoResultsMessage>No results found.</NoResultsMessage>
+        )}
       </ContentContainer>
       <CoFooter />
-    </BookPageContainer>
+    </PageContainer>
   );
 };
 
