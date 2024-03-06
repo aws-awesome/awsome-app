@@ -51,7 +51,7 @@ const LogoContainer = styled.div`
 
 const SideMenu = styled.div`
   position: fixed;
-  top: 0;
+  top: 10px;
   left: ${({ isOpen }) => (isOpen ? "0" : "-100%")};
   width: 200px;
   height: 100vh;

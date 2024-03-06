@@ -10,7 +10,7 @@ const PageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 70vh;
   background-color: #f3f4f6; /* 배경색 */
 `;
 
